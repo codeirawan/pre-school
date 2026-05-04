@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌟 Kuis Ceria Anak 🌟</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sky: #87CEEB; --sun: #FFD700; --grass: #7DC95E;
+    --coral: #FF6B6B; --mint: #4ECDC4; --lavender: #9B59B6;
+    --orange: #FF8C42; --pink: #FF69B4; --dark: #2C3E50;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(180deg,#87CEEB 0%,#B8E8FF 35%,#E8F8E8 70%,#7DC95E 100%);
+    min-height:100vh; overflow-x:hidden; position:relative;
+  }
+  .cloud { position:fixed; background:white; border-radius:50px; opacity:.85; z-index:0; }
+  .cloud::before,.cloud::after { content:''; position:absolute; background:white; border-radius:50%; }
+  .cloud-1 { width:120px;height:40px;top:8%;left:5%;animation:floatCloud 18s linear infinite; }
+  .cloud-1::before { width:60px;height:60px;top:-30px;left:15px; }
+  .cloud-1::after  { width:45px;height:45px;top:-20px;left:50px; }
+  .cloud-2 { width:90px;height:30px;top:15%;right:8%;animation:floatCloud 22s linear infinite reverse; }
+  .cloud-2::before { width:45px;height:45px;top:-22px;left:10px; }
+  .cloud-2::after  { width:35px;height:35px;top:-15px;left:40px; }
+  .cloud-3 { width:70px;height:25px;top:5%;left:40%;animation:floatCloud 15s linear infinite; }
+  .cloud-3::before { width:35px;height:35px;top:-18px;left:8px; }
+  .cloud-3::after  { width:28px;height:28px;top:-12px;left:30px; }
+  @keyframes floatCloud { 0%{transform:translateX(-200px)} 100%{transform:translateX(calc(100vw + 200px))} }
+  .sun {
+    position:fixed; width:80px;height:80px;
+    background:radial-gradient(circle,#FFE066,#FFD700);
+    border-radius:50%; top:20px;right:20px; z-index:0;
+    box-shadow:0 0 30px #FFD700,0 0 60px rgba(255,215,0,.4);
+    animation:sunPulse 3s ease-in-out infinite;
+  }
+  .sun::before {
+    content:''; position:absolute; inset:-15px; border-radius:50%;
+    background:radial-gradient(circle,transparent 50%,rgba(255,215,0,.15) 100%);
+    animation:sunRays 4s linear infinite;
+  }
+  @keyframes sunPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+  @keyframes sunRays  { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+  .stars { position:fixed;top:0;left:0;width:100%;pointer-events:none;z-index:0; }
+  .star  { position:absolute;animation:twinkle 2s ease-in-out infinite; }
+  @keyframes twinkle { 0%,100%{opacity:.3;transform:scale(.8)} 50%{opacity:1;transform:scale(1.2)} }
+
+  .app {
+    position:relative; z-index:10; min-height:100vh;
+    display:flex; flex-direction:column; align-items:center;
+    padding:20px 16px 40px;
+  }
+  .header { text-align:center; margin-bottom:20px; animation:bounceIn .8s cubic-bezier(.36,.07,.19,.97); }
+  .header-title {
+    font-family:'Baloo 2',cursive; font-size:clamp(26px,8vw,46px);
+    color:white; text-shadow:0 4px 0 rgba(0,0,0,.15),0 0 30px rgba(255,255,255,.5);
+    letter-spacing:2px; line-height:1.1;
+  }
+  .header-sub { font-size:clamp(12px,3.5vw,16px); color:rgba(255,255,255,.9); margin-top:4px; font-weight:700; }
+
+  /* CATEGORY */
+  .category-screen { width:100%; max-width:700px; }
+  .cat-title {
+    text-align:center; font-size:clamp(15px,4vw,21px); color:var(--dark);
+    margin-bottom:16px; font-weight:900; background:rgba(255,255,255,.92);
+    padding:11px 24px; border-radius:50px; width:100%;
+    box-shadow:0 4px 15px rgba(0,0,0,.1);
+  }
+  .categories-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+  @media(max-width:420px) { .categories-grid { grid-template-columns:repeat(3,1fr); gap:8px; } }
+  .cat-btn {
+    background:white; border:none; border-radius:20px; padding:13px 6px;
+    cursor:pointer; transition:transform .2s,box-shadow .2s;
+    box-shadow:0 6px 18px rgba(0,0,0,.11),0 2px 0 rgba(0,0,0,.06);
+    display:flex; flex-direction:column; align-items:center; gap:5px;
+    border-bottom:4px solid transparent;
+  }
+  .cat-btn:hover { transform:translateY(-5px) scale(1.05); }
+  .cat-btn:active { transform:scale(.97); }
+  .cat-btn .cat-icon { font-size:clamp(26px,7vw,38px); line-height:1; }
+  .cat-btn .cat-label { font-size:clamp(9px,2.5vw,13px); font-weight:900; color:var(--dark); text-align:center; }
+  .cat-btn.huruf    { border-bottom-color:#FF6B6B; background:linear-gradient(135deg,#fff5f5,white); }
+  .cat-btn.angka    { border-bottom-color:#FF8C42; background:linear-gradient(135deg,#fff8f0,white); }
+  .cat-btn.hewan    { border-bottom-color:#7DC95E; background:linear-gradient(135deg,#f0fff0,white); }
+  .cat-btn.buah     { border-bottom-color:#FF69B4; background:linear-gradient(135deg,#fff0f8,white); }
+  .cat-btn.sayur    { border-bottom-color:#4ECDC4; background:linear-gradient(135deg,#f0fffd,white); }
+  .cat-btn.warna    { border-bottom-color:#9B59B6; background:linear-gradient(135deg,#f8f0ff,white); }
+  .cat-btn.hijaiyah { border-bottom-color:#3498DB; background:linear-gradient(135deg,#f0f8ff,white); }
+  .cat-count { font-size:10px; color:#aaa; font-weight:700; }
+
+  /* QUIZ */
+  .quiz-screen { width:100%;max-width:560px;display:none;flex-direction:column;align-items:center;gap:14px; }
+  .quiz-screen.active { display:flex; }
+  .progress-info { display:flex;justify-content:space-between;align-items:center;width:100%;color:white;font-weight:900;font-size:13px;text-shadow:0 1px 3px rgba(0,0,0,.2);margin-bottom:3px; }
+  .score-badge { background:linear-gradient(135deg,#FFD700,#FF8C42);color:white;padding:4px 14px;border-radius:50px;font-size:14px;font-weight:900;box-shadow:0 3px 10px rgba(255,140,66,.4); }
+  .progress-bar-wrap { width:100%;background:rgba(255,255,255,.6);border-radius:50px;height:13px;overflow:hidden;box-shadow:inset 0 2px 4px rgba(0,0,0,.1); }
+  .progress-bar { height:100%;background:linear-gradient(90deg,#FFD700,#FF8C42);border-radius:50px;transition:width .5s cubic-bezier(.34,1.56,.64,1);box-shadow:0 2px 8px rgba(255,140,66,.5); }
+
+  /* QUESTION CARD */
+  .question-card {
+    background:rgba(255,255,255,.97); border-radius:28px; padding:22px 20px;
+    width:100%; text-align:center;
+    box-shadow:0 12px 40px rgba(0,0,0,.12),0 4px 0 rgba(0,0,0,.06);
+    animation:slideIn .4s cubic-bezier(.34,1.56,.64,1); position:relative; overflow:hidden;
+  }
+  .question-card::before {
+    content:''; position:absolute; top:0;left:0;right:0; height:5px;
+    background:linear-gradient(90deg,#FF6B6B,#FF8C42,#FFD700,#7DC95E,#4ECDC4,#9B59B6);
+  }
+  /* huruf card: show big letter + emoji */
+  .huruf-card { display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap; }
+  .huruf-letter {
+    font-family:'Baloo 2',cursive; font-size:clamp(62px,18vw,96px);
+    font-weight:900; line-height:1; color:#FF6B6B;
+    text-shadow:0 4px 0 rgba(255,107,107,.3);
+  }
+  .huruf-emoji { font-size:clamp(50px,14vw,80px); line-height:1; filter:drop-shadow(0 4px 6px rgba(0,0,0,.15)); }
+  .huruf-word { font-family:'Baloo 2',cursive; font-size:clamp(18px,5vw,28px); font-weight:800; color:var(--dark); margin-top:4px; }
+
+  .question-icon {
+    font-size:clamp(68px,18vw,108px); line-height:1.1; display:block;
+    margin-bottom:8px; filter:drop-shadow(0 4px 8px rgba(0,0,0,.15));
+    animation:iconBounce 2s ease-in-out infinite;
+  }
+  @keyframes iconBounce { 0%,100%{transform:translateY(0) rotate(-3deg)} 50%{transform:translateY(-8px) rotate(3deg)} }
+  .question-text { font-family:'Baloo 2',cursive; font-size:clamp(14px,3.8vw,19px); color:var(--dark); font-weight:700; line-height:1.4; }
+  .hijaiyah-arabic { font-size:clamp(60px,16vw,90px); font-weight:900; color:#1a3a8a; line-height:1.2; display:block; }
+  .hijaiyah-hint { font-size:13px; color:#888; font-weight:700; margin-top:2px; }
+
+  /* ANSWERS */
+  .answers-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; width:100%; }
+  .answer-btn {
+    background:white; border:3px solid #e8e8e8; border-radius:18px;
+    padding:13px 10px; cursor:pointer; transition:all .18s;
+    font-family:'Nunito',sans-serif; font-size:clamp(13px,3.5vw,16px);
+    font-weight:800; color:var(--dark);
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+  }
+  .answer-btn .ans-icon { font-size:clamp(22px,5.5vw,30px); line-height:1; }
+  .answer-btn:hover:not(:disabled) { transform:translateY(-3px) scale(1.03); border-color:#FFD700; box-shadow:0 8px 20px rgba(0,0,0,.12); }
+  .answer-btn:active:not(:disabled) { transform:scale(.97); }
+  .answer-btn.correct { background:linear-gradient(135deg,#d4edda,#b8f0c8); border-color:#28a745; color:#155724; animation:correctPop .4s cubic-bezier(.36,.07,.19,.97); }
+  .answer-btn.wrong   { background:linear-gradient(135deg,#f8d7da,#f5c0c5); border-color:#dc3545; color:#721c24; animation:shake .4s; }
+  .answer-btn:disabled { cursor:default; }
+  @keyframes correctPop { 0%{transform:scale(1)} 50%{transform:scale(1.12)} 100%{transform:scale(1)} }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
+  @keyframes slideIn { from{opacity:0;transform:translateY(30px) scale(.95)} to{opacity:1;transform:translateY(0) scale(1)} }
+  @keyframes bounceIn { from{opacity:0;transform:scale(.5)} 60%{transform:scale(1.1)} to{opacity:1;transform:scale(1)} }
+
+  /* FEEDBACK */
+  .feedback-overlay {
+    position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+    z-index:100; pointer-events:none; opacity:0; transition:opacity .25s;
+    background:rgba(0,0,0,.25); backdrop-filter:blur(3px);
+  }
+  .feedback-overlay.show { opacity:1; pointer-events:all; }
+  .feedback-box {
+    background:white; border-radius:28px; padding:26px 38px; text-align:center;
+    box-shadow:0 20px 60px rgba(0,0,0,.2); transform:scale(0);
+    transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+  }
+  .feedback-overlay.show .feedback-box { transform:scale(1); }
+  .feedback-emoji { font-size:66px; display:block; margin-bottom:10px; }
+  .feedback-text { font-family:'Baloo 2',cursive; font-size:22px; font-weight:800; }
+  .feedback-text.yay  { color:#28a745; }
+  .feedback-text.oops { color:#dc3545; }
+
+  /* RESULT */
+  .result-screen { display:none;flex-direction:column;align-items:center;gap:18px;width:100%;max-width:460px;text-align:center; }
+  .result-screen.active { display:flex; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+  .result-card { background:rgba(255,255,255,.97);border-radius:28px;padding:32px 26px;width:100%;box-shadow:0 15px 50px rgba(0,0,0,.15); }
+  .result-star  { font-size:76px;display:block;margin-bottom:8px;animation:iconBounce 1.5s ease-in-out infinite; }
+  .result-title { font-family:'Baloo 2',cursive;font-size:clamp(20px,6vw,30px);font-weight:800;color:var(--dark);margin-bottom:6px; }
+  .result-score { font-size:clamp(38px,12vw,60px);font-weight:900;color:var(--coral);line-height:1; }
+  .result-total { font-size:15px;color:#888;margin-top:3px;font-weight:700; }
+  .result-msg   { font-size:clamp(13px,3.5vw,17px);color:#555;margin-top:12px;font-weight:700; }
+  .stars-row    { display:flex;justify-content:center;gap:6px;margin-top:10px; }
+  .star-item    { font-size:28px;animation:twinkle 1s ease-in-out infinite; }
+  .star-item:nth-child(2){animation-delay:.15s} .star-item:nth-child(3){animation-delay:.3s}
+
+  .btn { padding:13px 30px;border-radius:50px;border:none;font-family:'Baloo 2',cursive;font-size:clamp(14px,4vw,19px);font-weight:800;cursor:pointer;transition:all .2s;box-shadow:0 6px 20px rgba(0,0,0,.15),0 3px 0 rgba(0,0,0,.1);letter-spacing:.5px; }
+  .btn:hover { transform:translateY(-3px);box-shadow:0 10px 25px rgba(0,0,0,.2),0 3px 0 rgba(0,0,0,.1); }
+  .btn:active { transform:translateY(0); }
+  .btn-primary { background:linear-gradient(135deg,#FF6B6B,#FF8C42);color:white; }
+  .btn-back    { background:linear-gradient(135deg,#4ECDC4,#44b8b0);color:white; }
+  .btn-row     { display:flex;gap:10px;flex-wrap:wrap;justify-content:center; }
+
+  .confetti-piece { position:fixed;top:-20px;border-radius:3px;animation:confettiFall linear forwards;z-index:200;pointer-events:none; }
+  @keyframes confettiFall { to{transform:translateY(110vh) rotate(720deg);opacity:0} }
+</style>
+</head>
+<body>
+
+<div class="cloud cloud-1"></div>
+<div class="cloud cloud-2"></div>
+<div class="cloud cloud-3"></div>
+<div class="sun"></div>
+<div class="stars" id="stars"></div>
+
+<div class="app">
+  <div class="header">
+    <div class="header-title">🌟 Kuis Ceria 🌟</div>
+    <div class="header-sub">Belajar Sambil Bermain!</div>
+  </div>
+
+  <!-- CATEGORY -->
+  <div class="category-screen" id="categoryScreen">
+    <div class="cat-title">🎮 Pilih Kategori Belajar</div>
+    <div class="categories-grid">
+      <button class="cat-btn huruf"    onclick="startQuiz('huruf')">
+        <span class="cat-icon">🔤</span><span class="cat-label">Huruf A–Z</span><span class="cat-count">26 soal</span>
+      </button>
+      <button class="cat-btn angka"    onclick="startQuiz('angka')">
+        <span class="cat-icon">🔢</span><span class="cat-label">Angka 1–20</span><span class="cat-count">20 soal</span>
+      </button>
+      <button class="cat-btn hewan"    onclick="startQuiz('hewan')">
+        <span class="cat-icon">🐾</span><span class="cat-label">Hewan</span><span class="cat-count">30 soal</span>
+      </button>
+      <button class="cat-btn buah"     onclick="startQuiz('buah')">
+        <span class="cat-icon">🍎</span><span class="cat-label">Buah</span><span class="cat-count">20 soal</span>
+      </button>
+      <button class="cat-btn sayur"    onclick="startQuiz('sayur')">
+        <span class="cat-icon">🥦</span><span class="cat-label">Sayuran</span><span class="cat-count">18 soal</span>
+      </button>
+      <button class="cat-btn warna"    onclick="startQuiz('warna')">
+        <span class="cat-icon">🎨</span><span class="cat-label">Warna</span><span class="cat-count">12 soal</span>
+      </button>
+      <button class="cat-btn hijaiyah" onclick="startQuiz('hijaiyah')">
+        <span class="cat-icon">📖</span><span class="cat-label">Hijaiyah</span><span class="cat-count">28 soal</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="quiz-screen" id="quizScreen">
+    <div class="progress-info">
+      <span id="questionCounter">Soal 1 / 10</span>
+      <span class="score-badge">⭐ <span id="scoreDisplay">0</span></span>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="progressBar" style="width:10%"></div>
+    </div>
+    <div class="question-card" id="questionCard">
+      <span class="question-icon" id="questionIcon">🐶</span>
+      <div class="question-text" id="questionText">Ini hewan apa?</div>
+    </div>
+    <div class="answers-grid" id="answersGrid"></div>
+    <button class="btn btn-back" onclick="goHome()" style="margin-top:2px;padding:9px 22px;font-size:14px;">🏠 Menu</button>
+  </div>
+
+  <!-- RESULT -->
+  <div class="result-screen" id="resultScreen">
+    <div class="result-card">
+      <span class="result-star" id="resultStar">🏆</span>
+      <div class="result-title" id="resultTitle">Hebat Sekali!</div>
+      <div class="result-score" id="resultScore">10</div>
+      <div class="result-total" id="resultTotal">dari 10 soal benar</div>
+      <div class="stars-row" id="starsRow"></div>
+      <div class="result-msg" id="resultMsg">Kamu luar biasa! 🎉</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="replayBtn">🔄 Main Lagi</button>
+      <button class="btn btn-back" onclick="goHome()">🏠 Menu</button>
+    </div>
+  </div>
+</div>
+
+<div class="feedback-overlay" id="feedbackOverlay">
+  <div class="feedback-box">
+    <span class="feedback-emoji" id="feedbackEmoji">🎉</span>
+    <div class="feedback-text" id="feedbackText">Benar!</div>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+//  QUIZ DATA — lengkap semua kategori
+// ─────────────────────────────────────────────
+const quizData = {
+
+  // HURUF A–Z dengan emoji + kata Indonesia
+  huruf: [
+    { letter:'A', emoji:'🍎', word:'Apel',    choices:['A','B','C','D'] },
+    { letter:'B', emoji:'🦋', word:'Burung',  choices:['A','B','C','D'] },
+    { letter:'C', emoji:'🦢', word:'Cangkir', choices:['B','C','D','E'] },
+    { letter:'D', emoji:'🦌', word:'Domba',   choices:['C','D','E','F'] },
+    { letter:'E', emoji:'🦅', word:'Elang',   choices:['D','E','F','G'] },
+    { letter:'F', emoji:'🦊', word:'Fauna',   choices:['E','F','G','H'] },
+    { letter:'G', emoji:'🐘', word:'Gajah',   choices:['F','G','H','I'] },
+    { letter:'H', emoji:'🦛', word:'Harimau', choices:['G','H','I','J'] },
+    { letter:'I', emoji:'🦆', word:'Itik',    choices:['H','I','J','K'] },
+    { letter:'J', emoji:'🦒', word:'Jerapah', choices:['I','J','K','L'] },
+    { letter:'K', emoji:'🐰', word:'Kelinci', choices:['J','K','L','M'] },
+    { letter:'L', emoji:'🦁', word:'Lebah',   choices:['K','L','M','N'] },
+    { letter:'M', emoji:'🐒', word:'Monyet',  choices:['L','M','N','O'] },
+    { letter:'N', emoji:'🐊', word:'Naga',    choices:['M','N','O','P'] },
+    { letter:'O', emoji:'🦧', word:'Orang Utan', choices:['N','O','P','Q'] },
+    { letter:'P', emoji:'🦚', word:'Panda',   choices:['O','P','Q','R'] },
+    { letter:'Q', emoji:'🐑', word:'Quail',   choices:['P','Q','R','S'] },
+    { letter:'R', emoji:'🦝', word:'Rusa',    choices:['Q','R','S','T'] },
+    { letter:'S', emoji:'🐍', word:'Singa',   choices:['R','S','T','U'] },
+    { letter:'T', emoji:'🐯', word:'Tikus',   choices:['S','T','U','V'] },
+    { letter:'U', emoji:'🦉', word:'Ulat',    choices:['T','U','V','W'] },
+    { letter:'V', emoji:'🦎', word:'Varanus', choices:['U','V','W','X'] },
+    { letter:'W', emoji:'🦓', word:'Wombat',  choices:['V','W','X','Y'] },
+    { letter:'X', emoji:'🦏', word:'Xenops',  choices:['W','X','Y','Z'] },
+    { letter:'Y', emoji:'🐧', word:'Yak',     choices:['X','Y','Z','A'] },
+    { letter:'Z', emoji:'🦓', word:'Zebra',   choices:['X','Y','Z','W'] },
+  ],
+
+  // ANGKA 1–20 dengan emoji benda
+  angka: [
+    { icon:'⭐',           count:1,  answer:'1',  choices:['1','2','3','4'] },
+    { icon:'🍎🍎',         count:2,  answer:'2',  choices:['1','2','3','4'] },
+    { icon:'🐱🐱🐱',       count:3,  answer:'3',  choices:['2','3','4','5'] },
+    { icon:'🌸🌸🌸🌸',     count:4,  answer:'4',  choices:['3','4','5','6'] },
+    { icon:'🐟🐟🐟🐟🐟',   count:5,  answer:'5',  choices:['4','5','6','7'] },
+    { icon:'🍭🍭🍭🍭🍭🍭', count:6,  answer:'6',  choices:['5','6','7','8'] },
+    { icon:'⚽⚽⚽⚽⚽⚽⚽', count:7, answer:'7',  choices:['6','7','8','9'] },
+    { icon:'🦋🦋🦋🦋🦋🦋🦋🦋', count:8, answer:'8', choices:['7','8','9','10'] },
+    { icon:'🌟🌟🌟🌟🌟🌟🌟🌟🌟', count:9, answer:'9', choices:['7','8','9','10'] },
+    { icon:'🍩🍩🍩🍩🍩🍩🍩🍩🍩🍩', count:10, answer:'10', choices:['8','9','10','11'] },
+    { icon:'🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈🎈', count:11, answer:'11', choices:['10','11','12','13'] },
+    { icon:'🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈', count:12, answer:'12', choices:['10','11','12','13'] },
+    { icon:'🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄', count:13, answer:'13', choices:['12','13','14','15'] },
+    { icon:'🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀🦀', count:14, answer:'14', choices:['12','13','14','15'] },
+    { icon:'🌻🌻🌻🌻🌻🌻🌻🌻🌻🌻🌻🌻🌻🌻🌻', count:15, answer:'15', choices:['13','14','15','16'] },
+    { icon:'🍦🍦🍦🍦🍦🍦🍦🍦🍦🍦🍦🍦🍦🍦🍦🍦', count:16, answer:'16', choices:['14','15','16','17'] },
+    { icon:'🐠🐠🐠🐠🐠🐠🐠🐠🐠🐠🐠🐠🐠🐠🐠🐠🐠', count:17, answer:'17', choices:['15','16','17','18'] },
+    { icon:'🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓🍓', count:18, answer:'18', choices:['16','17','18','19'] },
+    { icon:'🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺', count:19, answer:'19', choices:['17','18','19','20'] },
+    { icon:'🎀🎀🎀🎀🎀🎀🎀🎀🎀🎀🎀🎀🎀🎀🎀🎀🎀🎀🎀🎀', count:20, answer:'20', choices:['18','19','20','21'] },
+  ],
+
+  // HEWAN — 30 soal lengkap
+  hewan: [
+    { icon:'🐶', text:'Ini hewan apa?', answer:'Anjing',    choices:['Kucing','Anjing','Kelinci','Serigala'] },
+    { icon:'🐱', text:'Ini hewan apa?', answer:'Kucing',    choices:['Anjing','Kucing','Harimau','Musang'] },
+    { icon:'🐭', text:'Ini hewan apa?', answer:'Tikus',     choices:['Tikus','Hamster','Tupai','Landak'] },
+    { icon:'🐹', text:'Ini hewan apa?', answer:'Hamster',   choices:['Tikus','Hamster','Marmut','Kelinci'] },
+    { icon:'🐰', text:'Ini hewan apa?', answer:'Kelinci',   choices:['Tikus','Kelinci','Hamster','Tupai'] },
+    { icon:'🦊', text:'Ini hewan apa?', answer:'Rubah',     choices:['Serigala','Rubah','Anjing','Srigala'] },
+    { icon:'🐻', text:'Ini hewan apa?', answer:'Beruang',   choices:['Beruang','Panda','Koala','Rakun'] },
+    { icon:'🐼', text:'Ini hewan apa?', answer:'Panda',     choices:['Beruang','Panda','Koala','Zebra'] },
+    { icon:'🐨', text:'Ini hewan apa?', answer:'Koala',     choices:['Beruang','Wombat','Koala','Kanguru'] },
+    { icon:'🐯', text:'Ini hewan apa?', answer:'Harimau',   choices:['Singa','Harimau','Macan Tutul','Cheetah'] },
+    { icon:'🦁', text:'Ini hewan apa?', answer:'Singa',     choices:['Harimau','Singa','Macan Tutul','Jaguar'] },
+    { icon:'🐮', text:'Ini hewan apa?', answer:'Sapi',      choices:['Kerbau','Sapi','Banteng','Bison'] },
+    { icon:'🐷', text:'Ini hewan apa?', answer:'Babi',      choices:['Babi','Tapir','Kuda Nil','Babi Hutan'] },
+    { icon:'🐸', text:'Ini hewan apa?', answer:'Katak',     choices:['Katak','Kadal','Cecak','Iguana'] },
+    { icon:'🐵', text:'Ini hewan apa?', answer:'Monyet',    choices:['Monyet','Gorila','Simpanse','Orang Utan'] },
+    { icon:'🐔', text:'Ini hewan apa?', answer:'Ayam',      choices:['Bebek','Ayam','Angsa','Kalkun'] },
+    { icon:'🐧', text:'Ini hewan apa?', answer:'Penguin',   choices:['Merpati','Bebek','Penguin','Angsa'] },
+    { icon:'🐦', text:'Ini hewan apa?', answer:'Burung',    choices:['Burung','Kelelawar','Kupu-kupu','Capung'] },
+    { icon:'🦅', text:'Ini hewan apa?', answer:'Elang',     choices:['Elang','Merpati','Gagak','Kakatua'] },
+    { icon:'🦆', text:'Ini hewan apa?', answer:'Bebek',     choices:['Angsa','Bebek','Penguin','Ayam'] },
+    { icon:'🦉', text:'Ini hewan apa?', answer:'Burung Hantu', choices:['Elang','Burung Hantu','Gagak','Merpati'] },
+    { icon:'🦇', text:'Ini hewan apa?', answer:'Kelelawar', choices:['Burung','Kelelawar','Capung','Lebah'] },
+    { icon:'🐺', text:'Ini hewan apa?', answer:'Serigala',  choices:['Anjing','Rubah','Serigala','Dingo'] },
+    { icon:'🐗', text:'Ini hewan apa?', answer:'Babi Hutan',choices:['Babi','Tapir','Babi Hutan','Rusa'] },
+    { icon:'🐴', text:'Ini hewan apa?', answer:'Kuda',      choices:['Zebra','Kuda','Keledai','Unta'] },
+    { icon:'🦄', text:'Ini hewan apa?', answer:'Unicorn',   choices:['Kuda','Unicorn','Pegasus','Zebra'] },
+    { icon:'🐝', text:'Ini hewan apa?', answer:'Lebah',     choices:['Lebah','Tawon','Kupu-kupu','Capung'] },
+    { icon:'🐛', text:'Ini hewan apa?', answer:'Ulat',      choices:['Ulat','Cacing','Lintah','Kepik'] },
+    { icon:'🦋', text:'Ini hewan apa?', answer:'Kupu-kupu', choices:['Lebah','Ngengat','Kupu-kupu','Capung'] },
+    { icon:'🐌', text:'Ini hewan apa?', answer:'Siput',     choices:['Siput','Cacing','Kaki Seribu','Lintah'] },
+    { icon:'🐞', text:'Ini hewan apa?', answer:'Kumbang',   choices:['Kumbang','Lalat','Lebah','Semut'] },
+    { icon:'🦎', text:'Ini hewan apa?', answer:'Kadal',     choices:['Cicak','Kadal','Iguana','Komodo'] },
+    { icon:'🐍', text:'Ini hewan apa?', answer:'Ular',      choices:['Belut','Cacing','Ular','Lintah'] },
+    { icon:'🐢', text:'Ini hewan apa?', answer:'Kura-kura', choices:['Penyu','Kura-kura','Kadal','Iguana'] },
+    { icon:'🦖', text:'Ini hewan apa?', answer:'Dinosaurus',choices:['Buaya','Dinosaurus','Komodo','Iguana'] },
+    { icon:'🦕', text:'Ini hewan apa?', answer:'Brontosaurus', choices:['Dinosaurus','Brontosaurus','Gajah','Jerapah'] },
+    { icon:'🐳', text:'Ini hewan apa?', answer:'Paus',      choices:['Hiu','Lumba-lumba','Paus','Duyung'] },
+    { icon:'🐬', text:'Ini hewan apa?', answer:'Lumba-lumba',choices:['Paus','Lumba-lumba','Hiu','Ikan Pari'] },
+    { icon:'🦈', text:'Ini hewan apa?', answer:'Hiu',       choices:['Paus','Lumba-lumba','Hiu','Belut'] },
+    { icon:'🐙', text:'Ini hewan apa?', answer:'Gurita',    choices:['Ubur-ubur','Gurita','Cumi-cumi','Bintang Laut'] },
+    { icon:'🦀', text:'Ini hewan apa?', answer:'Kepiting',  choices:['Udang','Kepiting','Lobster','Tiram'] },
+    { icon:'🦞', text:'Ini hewan apa?', answer:'Lobster',   choices:['Kepiting','Lobster','Udang','Kerang'] },
+    { icon:'🦁', text:'Ini hewan apa?', answer:'Singa',     choices:['Harimau','Singa','Cheetah','Macan Tutul'] },
+    { icon:'🐘', text:'Ini hewan apa?', answer:'Gajah',     choices:['Badak','Kuda Nil','Gajah','Tapir'] },
+    { icon:'🦏', text:'Ini hewan apa?', answer:'Badak',     choices:['Gajah','Badak','Kuda Nil','Tapir'] },
+    { icon:'🦛', text:'Ini hewan apa?', answer:'Kuda Nil',  choices:['Gajah','Badak','Kuda Nil','Tapir'] },
+    { icon:'🦒', text:'Ini hewan apa?', answer:'Jerapah',   choices:['Unta','Kuda','Jerapah','Zebra'] },
+    { icon:'🦓', text:'Ini hewan apa?', answer:'Zebra',     choices:['Kuda','Zebra','Keledai','Jerapah'] },
+    { icon:'🦘', text:'Ini hewan apa?', answer:'Kanguru',   choices:['Koala','Wombat','Kanguru','Walabi'] },
+    { icon:'🦔', text:'Ini hewan apa?', answer:'Landak',    choices:['Landak','Tikus','Musang','Tupai'] },
+  ],
+
+  // BUAH — 20 soal
+  buah: [
+    { icon:'🍎', text:'Ini buah apa?', answer:'Apel',       choices:['Tomat','Apel','Ceri','Leci'] },
+    { icon:'🍊', text:'Ini buah apa?', answer:'Jeruk',      choices:['Lemon','Jeruk','Pepaya','Mangga'] },
+    { icon:'🍋', text:'Ini buah apa?', answer:'Lemon',      choices:['Jeruk','Lemon','Nanas','Alpukat'] },
+    { icon:'🍇', text:'Ini buah apa?', answer:'Anggur',     choices:['Kismis','Blueberry','Anggur','Ceri'] },
+    { icon:'🍓', text:'Ini buah apa?', answer:'Stroberi',   choices:['Stroberi','Raspberry','Ceri','Anggur'] },
+    { icon:'🫐', text:'Ini buah apa?', answer:'Blueberry',  choices:['Anggur','Blueberry','Kismis','Leci'] },
+    { icon:'🍈', text:'Ini buah apa?', answer:'Melon',      choices:['Semangka','Melon','Pepaya','Labu'] },
+    { icon:'🍉', text:'Ini buah apa?', answer:'Semangka',   choices:['Melon','Semangka','Pepaya','Jeruk'] },
+    { icon:'🍌', text:'Ini buah apa?', answer:'Pisang',     choices:['Mangga','Pisang','Pepaya','Durian'] },
+    { icon:'🍍', text:'Ini buah apa?', answer:'Nanas',      choices:['Durian','Nanas','Pepaya','Kelapa'] },
+    { icon:'🥭', text:'Ini buah apa?', answer:'Mangga',     choices:['Pepaya','Mangga','Nanas','Alpukat'] },
+    { icon:'🍑', text:'Ini buah apa?', answer:'Persik',     choices:['Aprikot','Persik','Plum','Pir'] },
+    { icon:'🍒', text:'Ini buah apa?', answer:'Ceri',       choices:['Ceri','Anggur','Stroberi','Leci'] },
+    { icon:'🍐', text:'Ini buah apa?', answer:'Pir',        choices:['Apel','Pir','Alpukat','Alpukat'] },
+    { icon:'🥝', text:'Ini buah apa?', answer:'Kiwi',       choices:['Kiwi','Alpukat','Mangga','Pepaya'] },
+    { icon:'🍅', text:'Ini buah apa?', answer:'Tomat',      choices:['Apel','Tomat','Pepaya','Ceri'] },
+    { icon:'🥥', text:'Ini buah apa?', answer:'Kelapa',     choices:['Durian','Kelapa','Nanas','Pepaya'] },
+    { icon:'🍆', text:'Ini buah apa?', answer:'Terong',     choices:['Ungu Kol','Terong','Anggur','Bit'] },
+    { icon:'🥑', text:'Ini buah apa?', answer:'Alpukat',    choices:['Alpukat','Kiwi','Pepaya','Pir'] },
+    { icon:'🌽', text:'Ini buah apa?', answer:'Jagung',     choices:['Pisang','Jagung','Singkong','Ketela'] },
+  ],
+
+  // SAYURAN — 18 soal
+  sayur: [
+    { icon:'🥦', text:'Ini sayur apa?', answer:'Brokoli',       choices:['Brokoli','Kembang Kol','Kubis','Bayam'] },
+    { icon:'🥕', text:'Ini sayur apa?', answer:'Wortel',        choices:['Wortel','Lobak','Kentang','Ubi'] },
+    { icon:'🌽', text:'Ini sayur apa?', answer:'Jagung',        choices:['Jagung','Kacang','Singkong','Pisang'] },
+    { icon:'🍅', text:'Ini sayur apa?', answer:'Tomat',         choices:['Apel','Tomat','Cabai','Paprika'] },
+    { icon:'🥬', text:'Ini sayur apa?', answer:'Selada',        choices:['Bayam','Kangkung','Selada','Kubis'] },
+    { icon:'🥒', text:'Ini sayur apa?', answer:'Timun',         choices:['Zucchini','Timun','Labu','Pare'] },
+    { icon:'🌶️', text:'Ini sayur apa?', answer:'Cabai',         choices:['Paprika','Cabai','Tomat','Lada'] },
+    { icon:'🫑', text:'Ini sayur apa?', answer:'Paprika',       choices:['Cabai','Paprika','Tomat','Terong'] },
+    { icon:'🧅', text:'Ini sayur apa?', answer:'Bawang Bombay', choices:['Bawang Putih','Bawang Bombay','Bawang Merah','Daun Bawang'] },
+    { icon:'🧄', text:'Ini sayur apa?', answer:'Bawang Putih',  choices:['Bawang Merah','Bawang Putih','Bawang Bombay','Jahe'] },
+    { icon:'🥔', text:'Ini sayur apa?', answer:'Kentang',       choices:['Ubi','Singkong','Kentang','Talas'] },
+    { icon:'🍠', text:'Ini sayur apa?', answer:'Ubi Jalar',     choices:['Kentang','Ubi Jalar','Talas','Singkong'] },
+    { icon:'🥜', text:'Ini sayur apa?', answer:'Kacang',        choices:['Kacang','Edamame','Lentil','Buncis'] },
+    { icon:'🫘', text:'Ini sayur apa?', answer:'Kacang Merah',  choices:['Kedelai','Kacang Merah','Kacang Hijau','Lentil'] },
+    { icon:'🥗', text:'Ini sayur apa?', answer:'Bayam',         choices:['Selada','Kangkung','Bayam','Sawi'] },
+    { icon:'🧆', text:'Ini sayur apa?', answer:'Buncis',        choices:['Buncis','Edamame','Kacang Panjang','Kapri'] },
+    { icon:'🫛', text:'Ini sayur apa?', answer:'Kapri',         choices:['Buncis','Kapri','Kacang Panjang','Edamame'] },
+    { icon:'🍄', text:'Ini sayur apa?', answer:'Jamur',         choices:['Jamur','Brokoli','Kubis','Kembang Kol'] },
+  ],
+
+  // WARNA — 12 soal
+  warna: [
+    { icon:'🔴', text:'Ini warna apa?', answer:'Merah',       choices:['Merah','Oranye','Ungu','Coklat'] },
+    { icon:'🟠', text:'Ini warna apa?', answer:'Oranye',      choices:['Kuning','Oranye','Merah','Coklat'] },
+    { icon:'🟡', text:'Ini warna apa?', answer:'Kuning',      choices:['Hijau','Emas','Kuning','Krem'] },
+    { icon:'🟢', text:'Ini warna apa?', answer:'Hijau',       choices:['Biru','Hijau','Toska','Kuning'] },
+    { icon:'🔵', text:'Ini warna apa?', answer:'Biru',        choices:['Biru','Ungu','Hijau','Abu-abu'] },
+    { icon:'🟣', text:'Ini warna apa?', answer:'Ungu',        choices:['Merah Muda','Ungu','Biru','Nila'] },
+    { icon:'⚫', text:'Ini warna apa?', answer:'Hitam',       choices:['Abu-abu','Hitam','Coklat','Nila'] },
+    { icon:'⚪', text:'Ini warna apa?', answer:'Putih',       choices:['Putih','Abu-abu','Krem','Silver'] },
+    { icon:'🟤', text:'Ini warna apa?', answer:'Coklat',      choices:['Oranye','Merah','Coklat','Krem'] },
+    { icon:'🩷', text:'Ini warna apa?', answer:'Merah Muda',  choices:['Merah','Ungu','Merah Muda','Salmon'] },
+    { icon:'🩵', text:'Ini warna apa?', answer:'Biru Muda',   choices:['Biru','Toska','Biru Muda','Nila'] },
+    { icon:'🟫', text:'Ini warna apa?', answer:'Coklat Tua',  choices:['Hitam','Coklat','Coklat Tua','Abu-abu'] },
+  ],
+
+  // HIJAIYAH — 28 huruf lengkap
+  hijaiyah: [
+    { icon:'ا', answer:'Alif',  roman:'Alif',  choices:['Alif','Ba','Ta','Tsa'],    arabic:true },
+    { icon:'ب', answer:'Ba',    roman:'Ba',    choices:['Alif','Ba','Ta','Tsa'],    arabic:true },
+    { icon:'ت', answer:'Ta',    roman:'Ta',    choices:['Ba','Ta','Tsa','Jim'],     arabic:true },
+    { icon:'ث', answer:'Tsa',   roman:'Tsa',   choices:['Ta','Tsa','Jim','Ha'],     arabic:true },
+    { icon:'ج', answer:'Jim',   roman:'Jim',   choices:['Tsa','Jim','Ha','Kha'],    arabic:true },
+    { icon:'ح', answer:'Ha',    roman:'Ha',    choices:['Jim','Ha','Kha','Dal'],    arabic:true },
+    { icon:'خ', answer:'Kha',   roman:'Kha',   choices:['Ha','Kha','Dal','Dzal'],   arabic:true },
+    { icon:'د', answer:'Dal',   roman:'Dal',   choices:['Kha','Dal','Dzal','Ra'],   arabic:true },
+    { icon:'ذ', answer:'Dzal',  roman:'Dzal',  choices:['Dal','Dzal','Ra','Zai'],   arabic:true },
+    { icon:'ر', answer:'Ra',    roman:'Ra',    choices:['Dzal','Ra','Zai','Sin'],   arabic:true },
+    { icon:'ز', answer:'Zai',   roman:'Zai',   choices:['Ra','Zai','Sin','Syin'],   arabic:true },
+    { icon:'س', answer:'Sin',   roman:'Sin',   choices:['Zai','Sin','Syin','Shad'], arabic:true },
+    { icon:'ش', answer:'Syin',  roman:'Syin',  choices:['Sin','Syin','Shad','Dhad'],arabic:true },
+    { icon:'ص', answer:'Shad',  roman:'Shad',  choices:['Syin','Shad','Dhad','Tha'],arabic:true },
+    { icon:'ض', answer:'Dhad',  roman:'Dhad',  choices:['Shad','Dhad','Tha','Dha'], arabic:true },
+    { icon:'ط', answer:'Tha',   roman:'Tha',   choices:['Dhad','Tha','Dha','Ain'],  arabic:true },
+    { icon:'ظ', answer:'Dha',   roman:'Dha',   choices:['Tha','Dha','Ain','Ghain'], arabic:true },
+    { icon:'ع', answer:'Ain',   roman:'Ain',   choices:['Dha','Ain','Ghain','Fa'],  arabic:true },
+    { icon:'غ', answer:'Ghain', roman:'Ghain', choices:['Ain','Ghain','Fa','Qaf'],  arabic:true },
+    { icon:'ف', answer:'Fa',    roman:'Fa',    choices:['Ghain','Fa','Qaf','Kaf'],  arabic:true },
+    { icon:'ق', answer:'Qaf',   roman:'Qaf',   choices:['Fa','Qaf','Kaf','Lam'],    arabic:true },
+    { icon:'ك', answer:'Kaf',   roman:'Kaf',   choices:['Qaf','Kaf','Lam','Mim'],   arabic:true },
+    { icon:'ل', answer:'Lam',   roman:'Lam',   choices:['Kaf','Lam','Mim','Nun'],   arabic:true },
+    { icon:'م', answer:'Mim',   roman:'Mim',   choices:['Lam','Mim','Nun','Wau'],   arabic:true },
+    { icon:'ن', answer:'Nun',   roman:'Nun',   choices:['Mim','Nun','Wau','Ha'],    arabic:true },
+    { icon:'و', answer:'Wau',   roman:'Wau',   choices:['Nun','Wau','Ha','Ya'],     arabic:true },
+    { icon:'ه', answer:'Ha\'',  roman:'Ha',    choices:['Wau','Ha\'','Lam Alif','Ya'], arabic:true },
+    { icon:'ي', answer:'Ya',    roman:'Ya',    choices:['Wau','Ha\'','Lam Alif','Ya'], arabic:true },
+  ],
+};
+
+// ─────────────────────────────────────────────
+let currentCategory = '';
+let questions = [];
+let currentQ = 0;
+let score = 0;
+let answered = false;
+
+// Decorative stars
+const starsEl = document.getElementById('stars');
+['⭐','✨','🌟','💫'].forEach((e,_) => {
+  for(let i=0;i<3;i++){
+    const s=document.createElement('div'); s.className='star';
+    s.textContent=e; s.style.left=Math.random()*100+'%'; s.style.top=Math.random()*55+'%';
+    s.style.animationDelay=Math.random()*2+'s'; s.style.fontSize=(13+Math.random()*14)+'px';
+    starsEl.appendChild(s);
+  }
+});
+
+function shuffle(arr){ return [...arr].sort(()=>Math.random()-.5); }
+
+function startQuiz(cat){
+  currentCategory=cat;
+  // For huruf/hijaiyah take all; others shuffle & cap at 15 for variety
+  const data = quizData[cat];
+  questions = shuffle(data).slice(0, Math.min(data.length, cat==='huruf'||cat==='hijaiyah' ? data.length : 15));
+  currentQ=0; score=0; answered=false;
+  document.getElementById('categoryScreen').style.display='none';
+  document.getElementById('resultScreen').classList.remove('active');
+  document.getElementById('quizScreen').classList.add('active');
+  renderQuestion();
+}
+
+function renderQuestion(){
+  answered=false;
+  const q=questions[currentQ];
+  const total=questions.length;
+  document.getElementById('questionCounter').textContent=`Soal ${currentQ+1} / ${total}`;
+  document.getElementById('scoreDisplay').textContent=score;
+  document.getElementById('progressBar').style.width=`${((currentQ+1)/total)*100}%`;
+
+  const iconEl=document.getElementById('questionIcon');
+  const textEl=document.getElementById('questionText');
+
+  // Render question card
+  if(currentCategory==='huruf'){
+    iconEl.innerHTML=`
+      <div class="huruf-card">
+        <div class="huruf-letter">${q.letter}</div>
+        <div class="huruf-emoji">${q.emoji}</div>
+      </div>
+      <div class="huruf-word">${q.word}</div>`;
+    textEl.textContent='Huruf apa ini?';
+  } else if(currentCategory==='hijaiyah'){
+    iconEl.innerHTML=`<span class="hijaiyah-arabic">${q.icon}</span>`;
+    textEl.innerHTML=`Ini huruf hijaiyah apa? <span class="hijaiyah-hint">Baca namanya!</span>`;
+  } else if(currentCategory==='angka'){
+    iconEl.innerHTML=`<span style="font-size:clamp(18px,4vw,28px);line-height:1.6;word-break:break-all;display:block;max-width:280px;margin:0 auto;">${q.icon}</span>`;
+    textEl.textContent='Ada berapa jumlahnya?';
+  } else {
+    iconEl.innerHTML=`<span style="font-size:clamp(68px,18vw,108px);line-height:1.1;display:block;margin-bottom:8px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.15));animation:iconBounce 2s ease-in-out infinite">${q.icon}</span>`;
+    textEl.textContent=q.text;
+  }
+
+  // Render choices
+  const grid=document.getElementById('answersGrid');
+  grid.innerHTML='';
+  const choices = currentCategory==='huruf' ? shuffle(q.choices) : shuffle(q.choices);
+  choices.forEach(c=>{
+    const btn=document.createElement('button');
+    btn.className='answer-btn';
+    btn.innerHTML=`<span>${c}</span>`;
+    btn.onclick=()=>checkAnswer(btn,c,q.answer);
+    grid.appendChild(btn);
+  });
+
+  const card=document.getElementById('questionCard');
+  card.style.animation='none'; card.offsetHeight;
+  card.style.animation='slideIn .4s cubic-bezier(.34,1.56,.64,1)';
+}
+
+function checkAnswer(btn,chosen,correct){
+  if(answered) return;
+  answered=true;
+  const allBtns=document.querySelectorAll('.answer-btn');
+  allBtns.forEach(b=>b.disabled=true);
+  if(chosen===correct){
+    btn.classList.add('correct'); score++;
+    showFeedback(true);
+  } else {
+    btn.classList.add('wrong');
+    allBtns.forEach(b=>{ if(b.querySelector('span').textContent===correct) b.classList.add('correct'); });
+    showFeedback(false);
+  }
+  document.getElementById('scoreDisplay').textContent=score;
+  setTimeout(()=>{
+    hideFeedback(); currentQ++;
+    if(currentQ<questions.length) renderQuestion(); else showResult();
+  },1300);
+}
+
+function showFeedback(ok){
+  const overlay=document.getElementById('feedbackOverlay');
+  const emoji=document.getElementById('feedbackEmoji');
+  const text=document.getElementById('feedbackText');
+  if(ok){
+    emoji.textContent=['🎉','⭐','🌟','✨','🏆','🎊','👏','💫'][Math.floor(Math.random()*8)];
+    text.textContent=['Benar! 🎉','Pintar! ⭐','Hebat!','Luar Biasa!','Keren! 🌟','Bagus Sekali!'][Math.floor(Math.random()*6)];
+    text.className='feedback-text yay';
+  } else {
+    emoji.textContent=['😅','💪','🤔','😊','🌈','🫶'][Math.floor(Math.random()*6)];
+    text.textContent=['Coba Lagi!','Hampir! 💪','Ayo Semangat!','Tetap Coba!','Belajar Lagi Yuk!'][Math.floor(Math.random()*5)];
+    text.className='feedback-text oops';
+  }
+  overlay.classList.add('show');
+}
+
+function hideFeedback(){ document.getElementById('feedbackOverlay').classList.remove('show'); }
+
+function showResult(){
+  document.getElementById('quizScreen').classList.remove('active');
+  const rs=document.getElementById('resultScreen');
+  rs.classList.add('active');
+  const total=questions.length;
+  const pct=score/total;
+  let star,title,msg,stars;
+  if(pct===1)      { star='🏆'; title='Sempurna!';       msg='Kamu luar biasa hebat! 🌟🌟🌟'; stars=3; }
+  else if(pct>=.8) { star='⭐'; title='Hebat Sekali!';   msg='Kamu sangat pintar! 🎉🎊';       stars=3; }
+  else if(pct>=.6) { star='😊'; title='Bagus!';          msg='Terus belajar ya! 💪✨';         stars=2; }
+  else if(pct>=.4) { star='🌈'; title='Ayo Coba Lagi!';  msg='Kamu pasti bisa lebih baik! 💫'; stars=1; }
+  else             { star='💪'; title='Semangat!';        msg='Belajar lagi yuk, ayo! 🌟';      stars=1; }
+  document.getElementById('resultStar').textContent=star;
+  document.getElementById('resultTitle').textContent=title;
+  document.getElementById('resultScore').textContent=score;
+  document.getElementById('resultTotal').textContent=`dari ${total} soal benar`;
+  document.getElementById('resultMsg').textContent=msg;
+  document.getElementById('starsRow').innerHTML='⭐'.repeat(stars).split('').map((s,i)=>`<span class="star-item" style="animation-delay:${i*.15}s">${s}</span>`).join('');
+  document.getElementById('replayBtn').onclick=()=>startQuiz(currentCategory);
+  if(pct>=.6) confetti();
+}
+
+function goHome(){
+  document.getElementById('quizScreen').classList.remove('active');
+  document.getElementById('resultScreen').classList.remove('active');
+  document.getElementById('categoryScreen').style.display='';
+  hideFeedback();
+}
+
+function confetti(){
+  const colors=['#FF6B6B','#FFD700','#4ECDC4','#FF69B4','#7DC95E','#9B59B6','#FF8C42','#3498DB'];
+  for(let i=0;i<70;i++){
+    const el=document.createElement('div');
+    el.className='confetti-piece';
+    el.style.left=Math.random()*100+'vw';
+    el.style.background=colors[Math.floor(Math.random()*colors.length)];
+    el.style.borderRadius=Math.random()>.5?'50%':'3px';
+    el.style.width=el.style.height=(8+Math.random()*10)+'px';
+    el.style.animationDuration=(1.5+Math.random()*2.5)+'s';
+    el.style.animationDelay=Math.random()*.6+'s';
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),5000);
+  }
+}
+</script>
+</body>
+</html>
